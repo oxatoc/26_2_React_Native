@@ -17,6 +17,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.linkWater,
     borderRadius: 10,
     // borderWidth: 1,
+    alignSelf: 'flex-start',
   },
   shrinkableWrapper: {
     flexDirection: 'row',
