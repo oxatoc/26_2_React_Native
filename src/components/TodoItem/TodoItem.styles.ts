@@ -4,15 +4,24 @@ import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   root: {
-    flexDirection: 'row',
     marginVertical: 10,
-    alignItems: 'flex-start',
+    // alignItems: 'flex-start',
+    flexDirection: 'row',
+  },
+  deleteButton: {
+    width: 38,
+    height: 38,
+    marginLeft: 'auto',
   },
   gestureLever: {
-    width: 25,
-    height: 25,
-    backgroundColor: '#CCCCCC',
-    // transform: [{translateX: -200}],
+    backgroundColor: COLORS.linkWater,
+    borderRadius: 10,
+    // borderWidth: 1,
+  },
+  shrinkableWrapper: {
+    flexDirection: 'row',
+    flexGrow: 1,
+    alignItems: 'flex-start',
   },
   todoText: {
     ...fonts.dMSans700,
@@ -26,7 +35,6 @@ export const styles = StyleSheet.create({
     flexBasis: 0,
     marginLeft: 16,
     marginRight: 8,
-    alignSelf: 'stretch',
   },
   thumbnail: {
     marginRight: 16,
