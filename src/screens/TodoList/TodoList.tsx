@@ -1,11 +1,9 @@
 import {BaseTextInput} from '@/components/Base/TextInput/BaseTextInput';
 import {CommonText} from '@/components/Common/CommonText/CommonText';
-import Example from '@/components/Example';
 import notificationService from '@/services/todoNotificationService';
 import notifee from '@notifee/react-native';
 import React, {useCallback, useEffect} from 'react';
-import {ListRenderItemInfo, View} from 'react-native';
-import Animated from 'react-native-reanimated';
+import {ListRenderItemInfo, SectionList, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {TodoItem} from '../../components/TodoItem/TodoItem';
 import {TodoListFetch} from '../../components/TodoListFetch/TodoListFetch';
@@ -93,7 +91,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
     if (initialNotification) {
       const todoId = initialNotification.notification?.data?.id;
       if (todoId) {
-        navigation.navigate('TodoDetails', {todoId: parseInt(todoId)});
+        navigation.navigate('TodoDetails', {todoId: parseInt(todoId, 10)});
       }
     }
   }, [navigation]);
@@ -117,7 +115,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
           onRetry={handleLoad}
         />
       )}
-      {/* <SectionList
+      <SectionList
         sections={[
           {data: uncompletedTodos, title: 'Незавершенные'},
           {data: completedTodos, title: 'Завершенные'},
@@ -125,8 +123,8 @@ export const TodoList = ({navigation}: TodoListProps) => {
         renderItem={renderTodo}
         renderSectionHeader={renderSectionHeader}
         SectionSeparatorComponent={sectionSeparator}
-      /> */}
-      <Animated.ScrollView>
+      />
+      {/* <Animated.ScrollView>
         {uncompletedTodos.map(item => (
           <TodoItem
             key={`${item.id}-${item.title}`}
@@ -136,8 +134,8 @@ export const TodoList = ({navigation}: TodoListProps) => {
             onPress={handlePressThumbnail}
           />
         ))}
-      </Animated.ScrollView>
-      <Example />
+      </Animated.ScrollView> */}
+      {/* <Example /> */}
     </>
   );
 };

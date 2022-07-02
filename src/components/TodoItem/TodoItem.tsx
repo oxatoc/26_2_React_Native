@@ -41,9 +41,6 @@ export const TodoItem = ({
   const GESTURE_THRESHOLD = 0.5;
 
   const gesture = Gesture.Pan()
-    .onBegin(() => {
-      console.log('---');
-    })
     .onUpdate(e => {
       if (e.translationX === 0) {
         return;

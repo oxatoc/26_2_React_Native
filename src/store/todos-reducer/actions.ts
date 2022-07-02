@@ -33,7 +33,7 @@ export const getTodos = () => (dispatch: Dispatch<any>) => {
     .get(TODOS_URL)
     .then<Todo[]>(response => response.data)
     .then(result => {
-      const todos = result.splice(0, 2).reduce<TodosByCompleted>(
+      const todos = result.splice(0, 20).reduce<TodosByCompleted>(
         (acc: TodosByCompleted, el: Todo) => {
           const assets: Asset[] = [];
 
