@@ -124,18 +124,6 @@ export const TodoList = ({navigation}: TodoListProps) => {
         renderSectionHeader={renderSectionHeader}
         SectionSeparatorComponent={sectionSeparator}
       />
-      {/* <Animated.ScrollView>
-        {uncompletedTodos.map(item => (
-          <TodoItem
-            key={`${item.id}-${item.title}`}
-            todo={item}
-            onComplete={handleComplete}
-            onDelete={handleDelete}
-            onPress={handlePressThumbnail}
-          />
-        ))}
-      </Animated.ScrollView> */}
-      {/* <Example /> */}
     </>
   );
 };
