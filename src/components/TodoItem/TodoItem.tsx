@@ -61,13 +61,16 @@ export const TodoItem = ({
     .onEnd(e => {
       const threshold = Math.abs(e.translationX) / MAX_WIDTH;
 
+      let endValue;
+
       if (e.translationX > 0) {
-        leverWidth.value = 0;
-        startWidth.value = 0;
-        return;
+        endValue = threshold > GESTURE_THRESHOLD ? 0 : MAX_WIDTH;
+      } else {
+        endValue = threshold < GESTURE_THRESHOLD ? 0 : MAX_WIDTH;
       }
-      leverWidth.value = MAX_WIDTH;
-      startWidth.value = MAX_WIDTH;
+
+      leverWidth.value = endValue;
+      startWidth.value = endValue;
     });
 
   return (
