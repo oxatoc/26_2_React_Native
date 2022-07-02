@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Reanimated, {
   LightSpeedInLeft,
@@ -36,16 +36,12 @@ export const TodoItem = ({
   });
 
   const start = useSharedValue(0);
-  // const MAX_OFFSET = -50;
+  const MAX_OFFSET = -50;
   const gesture = Gesture.Pan()
     .onUpdate(e => {
-      offset.value = e.translationX + start.value;
-      // if (e.translationX < -start.value && e.translationX > MAX_OFFSET) {
-      //   console.log('offset1', offset.value);
-      //   offset.value = e.translationX + start.value;
-      //   console.log('e.translationX', e.translationX);
-      //   console.log('offset2', offset.value);
-      // }
+      if (e.translationX < -start.value && e.translationX > MAX_OFFSET) {
+        offset.value = e.translationX + start.value;
+      }
     })
     .onEnd(() => {
       start.value = offset.value;
@@ -69,10 +65,8 @@ export const TodoItem = ({
       )}
       <CommonDeleteButton onPress={() => onDelete(todo.id)} />
       <GestureDetector gesture={gesture}>
-        <View style={[animatedStyle, styles.gestureLever]}>
-          {/* Рычаг для жеста анимации */}
-          {/* <Text>1lever</Text> */}
-        </View>
+        {/* Рычаг для жеста анимации */}
+        <Reanimated.View style={[animatedStyle, styles.gestureLever]} />
       </GestureDetector>
     </Reanimated.View>
   );
