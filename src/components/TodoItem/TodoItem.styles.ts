@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     width: 25,
     height: 25,
     backgroundColor: '#CCCCCC',
+    // transform: [{translateX: -200}],
   },
   todoText: {
     ...fonts.dMSans700,

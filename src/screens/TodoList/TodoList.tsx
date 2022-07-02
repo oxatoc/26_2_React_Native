@@ -88,7 +88,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
     });
   }, []);
 
-  const isAppOpenedByNotif = async () => {
+  const isAppOpenedByNotif = useCallback(async () => {
     const initialNotification = await notifee.getInitialNotification();
     if (initialNotification) {
       const todoId = initialNotification.notification?.data?.id;
@@ -96,11 +96,11 @@ export const TodoList = ({navigation}: TodoListProps) => {
         navigation.navigate('TodoDetails', {todoId: parseInt(todoId)});
       }
     }
-  };
+  }, [navigation]);
 
   useEffect(() => {
     isAppOpenedByNotif();
-  }, []);
+  }, [isAppOpenedByNotif]);
 
   return (
     <>

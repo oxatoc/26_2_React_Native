@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Reanimated, {
   LightSpeedInLeft,
@@ -22,11 +22,11 @@ export const TodoItem = ({
 }: TodoItemProps) => {
   const handleComplete = useCallback(() => {
     onComplete(todo.id);
-  }, [onComplete]);
+  }, [onComplete, todo.id]);
 
   const handlePressImage = useCallback(() => {
     onPress(todo.id);
-  }, [onPress]);
+  }, [onPress, todo.id]);
 
   const offset = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
@@ -36,12 +36,16 @@ export const TodoItem = ({
   });
 
   const start = useSharedValue(0);
-  const MAX_OFFSET = -50;
+  // const MAX_OFFSET = -50;
   const gesture = Gesture.Pan()
     .onUpdate(e => {
-      if (e.translationX < -start.value && e.translationX > MAX_OFFSET) {
-        offset.value = e.translationX + start.value;
-      }
+      offset.value = e.translationX + start.value;
+      // if (e.translationX < -start.value && e.translationX > MAX_OFFSET) {
+      //   console.log('offset1', offset.value);
+      //   offset.value = e.translationX + start.value;
+      //   console.log('e.translationX', e.translationX);
+      //   console.log('offset2', offset.value);
+      // }
     })
     .onEnd(() => {
       start.value = offset.value;
@@ -67,7 +71,7 @@ export const TodoItem = ({
       <GestureDetector gesture={gesture}>
         <View style={[animatedStyle, styles.gestureLever]}>
           {/* Рычаг для жеста анимации */}
-          <Text>lever</Text>
+          {/* <Text>1lever</Text> */}
         </View>
       </GestureDetector>
     </Reanimated.View>
