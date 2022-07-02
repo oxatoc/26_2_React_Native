@@ -37,7 +37,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
   }, [dispatch]);
 
   const handleComplete = useCallback(
-    id => {
+    (id: number) => {
       dispatch(completeTodo(id));
     },
     [dispatch],
