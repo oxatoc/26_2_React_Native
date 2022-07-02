@@ -28,23 +28,20 @@ export const TodoItem = ({
     onPress(todo.id);
   }, [onPress, todo.id]);
 
-  // const offset = useSharedValue(0);
-  const MAX_WIDTH = 100;
+  const MAX_WIDTH = 38 + 18;
   const leverWidth = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      // transform: [{translateX: offset.value}],
       width: leverWidth.value,
     };
   });
 
-  // const start = useSharedValue(0);
-  // const MAX_OFFSET = -80;
   const startWidth = useSharedValue(0);
+
+  const GESTURE_THRESHOLD = 0.5;
 
   const gesture = Gesture.Pan()
     .onBegin(() => {
-      // startWidth.value = leverWidth.value;
       console.log('---');
     })
     .onUpdate(e => {
@@ -52,9 +49,7 @@ export const TodoItem = ({
         return;
       }
 
-      const direction = e.translationX;
-
-      if (direction > 0) {
+      if (e.translationX > 0) {
         leverWidth.value = Math.max(startWidth.value - e.translationX, 0);
         return;
       }
@@ -62,23 +57,17 @@ export const TodoItem = ({
       if (e.translationX > -MAX_WIDTH) {
         leverWidth.value = -e.translationX;
       }
-
-      // if (e.translationX < -start.value && e.translationX > MAX_OFFSET) {
-      //   leverWidth.value = Math.abs(e.translationX + start.value);
-      //   // offset.value = e.translationX + start.value;
-      // }
     })
     .onEnd(e => {
-      const direction = e.translationX;
-      if (direction > 0) {
+      const threshold = Math.abs(e.translationX) / MAX_WIDTH;
+
+      if (e.translationX > 0) {
         leverWidth.value = 0;
         startWidth.value = 0;
         return;
       }
       leverWidth.value = MAX_WIDTH;
       startWidth.value = MAX_WIDTH;
-      // start.value = offset.value;
-      // leverWidth.value = 0;
     });
 
   return (
