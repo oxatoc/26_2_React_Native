@@ -88,9 +88,9 @@ export const TodoItem = ({
       style={styles.root}
       entering={LightSpeedInLeft}
       exiting={LightSpeedOutRight}>
-      <View style={styles.shrinkableWrapper}>
-        <BaseCheckbox checked={todo.completed} onPress={handleComplete} />
-        <GestureDetector gesture={gesture}>
+      <GestureDetector gesture={gesture}>
+        <View style={styles.shrinkableWrapper}>
+          <BaseCheckbox checked={todo.completed} onPress={handleComplete} />
           <TouchableOpacity
             onPress={handlePressImage}
             style={styles.todoTextWrapper}>
@@ -98,11 +98,11 @@ export const TodoItem = ({
               {todo.id}: {todo.title}
             </CommonText>
           </TouchableOpacity>
-        </GestureDetector>
-        {todo.assets.length > 0 && (
-          <BaseThumbnail style={styles.thumbnail} uri={todo.assets[0].uri} />
-        )}
-      </View>
+          {todo.assets.length > 0 && (
+            <BaseThumbnail style={styles.thumbnail} uri={todo.assets[0].uri} />
+          )}
+        </View>
+      </GestureDetector>
       <Reanimated.View style={[styles.gestureLever, animatedStyle]}>
         <CommonDeleteButton
           onPress={() => onDelete(todo.id)}
