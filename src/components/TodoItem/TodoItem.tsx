@@ -2,10 +2,12 @@ import React, {useCallback} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Reanimated, {
+  Easing,
   LightSpeedInLeft,
   LightSpeedOutRight,
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
 import {BaseCheckbox} from '../Base/Checkbox/BaseCheckbox';
 import {BaseThumbnail} from '../Base/Thumbnail/BaseThumbnail';
@@ -41,32 +43,39 @@ export const TodoItem = ({
   const GESTURE_THRESHOLD = 0.5;
 
   const gesture = Gesture.Pan()
-    .onUpdate(e => {
-      if (e.translationX === 0) {
+    .onUpdate(({translationX}) => {
+      if (translationX === 0) {
         return;
       }
 
-      if (e.translationX > 0) {
-        leverWidth.value = Math.max(startWidth.value - e.translationX, 0);
+      if (translationX > 0) {
+        leverWidth.value = Math.max(startWidth.value - translationX, 0);
         return;
       }
 
-      if (e.translationX > -MAX_WIDTH) {
-        leverWidth.value = -e.translationX;
+      if (leverWidth.value === MAX_WIDTH) {
+        return;
+      }
+      if (translationX > -MAX_WIDTH) {
+        leverWidth.value = -translationX;
       }
     })
-    .onEnd(e => {
-      const threshold = Math.abs(e.translationX) / MAX_WIDTH;
+    .onEnd(({translationX}) => {
+      let threshold = Math.abs(translationX) / MAX_WIDTH;
 
       let endValue;
 
-      if (e.translationX > 0) {
+      if (translationX > 0) {
         endValue = threshold > GESTURE_THRESHOLD ? 0 : MAX_WIDTH;
       } else {
         endValue = threshold < GESTURE_THRESHOLD ? 0 : MAX_WIDTH;
       }
 
-      leverWidth.value = endValue;
+      leverWidth.value = withTiming(endValue, {
+        duration: 300,
+        easing:
+          endValue === 0 ? Easing.in(Easing.ease) : Easing.out(Easing.ease),
+      });
       startWidth.value = endValue;
     })
     .activeOffsetX([-10, 10]);

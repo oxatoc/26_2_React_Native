@@ -15,11 +15,10 @@ export const styles = StyleSheet.create({
     width: 38,
     height: 38,
     marginLeft: 'auto',
-    marginRight: 8,
   },
   gestureLever: {
     borderRadius: 10,
-    alignSelf: 'flex-start',
+    alignSelf: 'stretch',
   },
   shrinkableWrapper: {
     flexDirection: 'row',
@@ -43,7 +42,7 @@ export const styles = StyleSheet.create({
     marginRight: 8,
   },
   thumbnail: {
-    marginRight: 16,
+    marginRight: 8,
   },
   thumbnailsWrapper: {
     flexDirection: 'row',
