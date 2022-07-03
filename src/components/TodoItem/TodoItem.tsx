@@ -42,15 +42,6 @@ export const TodoItem = ({
 
   const gesture = Gesture.Pan()
     .onUpdate(e => {
-      const isHorizontal = (translationX: number, translationY: number) =>
-        Math.abs((Math.atan(translationY / translationX) * 180) / 3.14) < 45;
-      if (
-        e.translationX === 0 ||
-        !isHorizontal(e.translationX, e.translationY)
-      ) {
-        return;
-      }
-
       if (e.translationX > 0) {
         leverWidth.value = Math.max(startWidth.value - e.translationX, 0);
         return;
@@ -61,13 +52,6 @@ export const TodoItem = ({
       }
     })
     .onEnd(e => {
-      const isHorizontal = (translationX: number, translationY: number) =>
-        Math.abs((Math.atan(translationY / translationX) * 180) / 3.14) < 45;
-
-      if (!isHorizontal(e.translationX, e.translationY)) {
-        return;
-      }
-
       const threshold = Math.abs(e.translationX) / MAX_WIDTH;
 
       let endValue;
