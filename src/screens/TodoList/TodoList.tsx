@@ -78,7 +78,9 @@ export const TodoList = ({navigation}: TodoListProps) => {
     <CommonText style={styles.sectionHeader}>{section.title}</CommonText>
   );
 
-  const sectionSeparator = () => <View style={styles.separator} />;
+  const sectionSeparator = () => <View style={styles.sectionSeparator} />;
+
+  const itemSeparator = () => <View style={styles.itemSeparator} />;
 
   useEffect(() => {
     return notifee.onForegroundEvent(({type, detail}) => {
@@ -123,6 +125,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
         renderItem={renderTodo}
         renderSectionHeader={renderSectionHeader}
         SectionSeparatorComponent={sectionSeparator}
+        ItemSeparatorComponent={itemSeparator}
       />
     </>
   );
