@@ -3,7 +3,7 @@ import {CommonText} from '@/components/Common/CommonText/CommonText';
 import notificationService from '@/services/todoNotificationService';
 import notifee from '@notifee/react-native';
 import React, {useCallback, useEffect} from 'react';
-import {ListRenderItemInfo, SectionList, View} from 'react-native';
+import {FlatList, ListRenderItemInfo, SectionList, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {TodoItem} from '../../components/TodoItem/TodoItem';
 import {TodoListFetch} from '../../components/TodoListFetch/TodoListFetch';
@@ -117,6 +117,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
           onRetry={handleLoad}
         />
       )}
+      <FlatList data={uncompletedTodos} renderItem={renderTodo} />
       <SectionList
         sections={[
           {data: uncompletedTodos, title: 'Незавершенные'},

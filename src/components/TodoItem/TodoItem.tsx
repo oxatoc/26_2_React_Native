@@ -80,7 +80,8 @@ export const TodoItem = ({
 
       leverWidth.value = endValue;
       startWidth.value = endValue;
-    });
+    })
+    .activeOffsetX([-10, 10]);
 
   return (
     <Reanimated.View
