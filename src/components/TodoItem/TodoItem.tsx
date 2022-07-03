@@ -64,7 +64,7 @@ export const TodoItem = ({
       const isHorizontal = (translationX: number, translationY: number) =>
         Math.abs((Math.atan(translationY / translationX) * 180) / 3.14) < 45;
 
-      if (!isHorizontal) {
+      if (!isHorizontal(e.translationX, e.translationY)) {
         return;
       }
 
