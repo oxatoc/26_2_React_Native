@@ -1,3 +1,4 @@
+import {BORDER} from '@/constants/border';
 import {COLORS} from '@/constants/colors';
 import {fonts} from '@/styles/fonts.styles';
 import {StyleSheet} from 'react-native';
@@ -5,24 +6,28 @@ import {StyleSheet} from 'react-native';
 export const styles = StyleSheet.create({
   root: {
     marginVertical: 10,
-    // alignItems: 'flex-start',
     flexDirection: 'row',
+    backgroundColor: COLORS.linkWater,
+    borderTopRightRadius: BORDER.radius,
+    borderBottomRightRadius: BORDER.radius,
   },
   deleteButton: {
     width: 38,
     height: 38,
     marginLeft: 'auto',
+    marginRight: 8,
   },
   gestureLever: {
-    backgroundColor: COLORS.linkWater,
     borderRadius: 10,
-    // borderWidth: 1,
     alignSelf: 'flex-start',
   },
   shrinkableWrapper: {
     flexDirection: 'row',
     flexGrow: 1,
     alignItems: 'flex-start',
+    backgroundColor: COLORS.white,
+    borderTopRightRadius: BORDER.radius,
+    borderBottomRightRadius: BORDER.radius,
   },
   todoText: {
     ...fonts.dMSans700,

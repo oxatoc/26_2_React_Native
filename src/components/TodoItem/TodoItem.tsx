@@ -28,7 +28,7 @@ export const TodoItem = ({
     onPress(todo.id);
   }, [onPress, todo.id]);
 
-  const MAX_WIDTH = 38 + 18;
+  const MAX_WIDTH = 38 + 38;
   const leverWidth = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -42,6 +42,10 @@ export const TodoItem = ({
 
   const gesture = Gesture.Pan()
     .onUpdate(e => {
+      if (e.translationX === 0) {
+        return;
+      }
+
       if (e.translationX > 0) {
         leverWidth.value = Math.max(startWidth.value - e.translationX, 0);
         return;
