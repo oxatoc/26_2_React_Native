@@ -98,7 +98,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
   const itemSeparator = () => <View style={styles.itemSeparator} />;
 
   useEffect(() => {
-    return notifee.onForegroundEvent(({type, detail}) => {
+    notifee.onForegroundEvent(({type, detail}) => {
       notificationService.handleEvent(type, detail);
     });
   }, []);
