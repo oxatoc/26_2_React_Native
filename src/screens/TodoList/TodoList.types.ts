@@ -1,4 +1,5 @@
 import {StackNavigationProps} from '@/navigation/StackNavigator/StackNavigation.types';
+import {SectionListData} from 'react-native';
 import {Asset} from 'react-native-image-picker';
 
 export type Todo = {
@@ -12,8 +13,5 @@ export type Todo = {
 export type TodoListProps = StackNavigationProps<'TodoList'>;
 
 export type Section = {
-  section: {
-    data: Todo[];
-    title: string;
-  };
+  section: SectionListData<Todo>;
 };

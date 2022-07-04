@@ -4,9 +4,9 @@ import notificationService from '@/services/todoNotificationService';
 import notifee from '@notifee/react-native';
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {
-  DefaultSectionT,
   SectionList,
   SectionListData,
+  SectionListRenderItemInfo,
   View,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -25,7 +25,7 @@ import {
   selectUncompleted,
 } from '../../store/todos-reducer/selectors';
 import {styles} from './TodoList.styles';
-import {Todo, TodoListProps} from './TodoList.types';
+import {Section, Todo, TodoListProps} from './TodoList.types';
 
 export const TodoList = ({navigation}: TodoListProps) => {
   const completedTodos = useSelector(selectCompleted);
@@ -80,7 +80,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
   //   />
   // );
 
-  const renderTodo = (info: {item: Todo; index: any; section: any}) => {
+  const renderTodo = (info: SectionListRenderItemInfo<Todo>) => {
     const {item, index, section} = info;
 
     return (
@@ -90,14 +90,12 @@ export const TodoList = ({navigation}: TodoListProps) => {
         onComplete={handleComplete}
         onDelete={handleDelete}
         onPress={handlePressThumbnail}
-        doDemoSwipe={index === 0 && section.key === '0'}
+        doDemoSwipe={index === 0 && section.key === 'first'}
       />
     );
   };
 
-  const renderSectionHeader = ({
-    section,
-  }: SectionListData<Todo, DefaultSectionT>) => (
+  const renderSectionHeader = ({section}: Section) => (
     <CommonText style={styles.sectionHeader}>{section.title}</CommonText>
   );
 
@@ -127,8 +125,8 @@ export const TodoList = ({navigation}: TodoListProps) => {
 
   const sections = useMemo<ReadonlyArray<SectionListData<Todo>>>(() => {
     return [
-      {data: uncompletedTodos, title: 'Незавершенные', key: '0'},
-      {data: completedTodos, title: 'Завершенные', key: '1'},
+      {data: uncompletedTodos, title: 'Незавершенные', key: 'first'},
+      {data: completedTodos, title: 'Завершенные', key: 'second'},
     ];
   }, [completedTodos, uncompletedTodos]);
 
