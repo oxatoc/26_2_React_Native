@@ -1,5 +1,5 @@
 import {COLORS} from '@/constants/colors';
-import React, {useEffect} from 'react';
+import React from 'react';
 import Reanimated, {
   Easing,
   runOnJS,
@@ -21,12 +21,6 @@ export const BaseCheckbox = ({checked, onPress, style}: BaseCheckboxProps) => {
   const backgroundStyle = useSharedValue(getBackground(checked));
 
   const borderStyle = useSharedValue(getBorder(checked));
-
-  useEffect(() => {
-    backgroundStyle.value = getBackground(checked);
-
-    borderStyle.value = getBorder(checked);
-  }, [backgroundStyle, borderStyle, checked]);
 
   const animation = {
     duration: 300,
