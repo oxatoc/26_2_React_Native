@@ -28,16 +28,11 @@ export const BaseCheckbox = ({checked, onPress, style}: BaseCheckboxProps) => {
   };
 
   const handlePress = () => {
-    backgroundStyle.value = withTiming(
-      !checked ? COLORS.lightRoyalBlue : COLORS.transparent,
-      animation,
-      () => runOnJS(onPress)(),
+    backgroundStyle.value = withTiming(getBackground(!checked), animation, () =>
+      runOnJS(onPress)(),
     );
 
-    borderStyle.value = withTiming(
-      !checked ? COLORS.lightRoyalBlue : COLORS.rockBlue,
-      animation,
-    );
+    borderStyle.value = withTiming(getBackground(!checked), animation);
   };
 
   const animatedStyles = useAnimatedStyle(() => {
