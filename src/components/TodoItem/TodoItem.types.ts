@@ -5,4 +5,5 @@ export type TodoItemProps = {
   onComplete: (id: number) => void;
   onDelete: (id: number | string) => void;
   onPress: (id: number) => void;
+  doDemoSwipe: boolean; // показывать демонстрацию свайпа
 };

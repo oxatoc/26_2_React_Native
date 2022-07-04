@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Reanimated, {
@@ -7,6 +7,7 @@ import Reanimated, {
   LightSpeedOutRight,
   useAnimatedStyle,
   useSharedValue,
+  withSequence,
   withTiming,
 } from 'react-native-reanimated';
 import {BaseCheckbox} from '../Base/Checkbox/BaseCheckbox';
@@ -21,6 +22,7 @@ export const TodoItem = ({
   onComplete,
   onDelete,
   onPress,
+  doDemoSwipe = false,
 }: TodoItemProps) => {
   const handleComplete = useCallback(() => {
     onComplete(todo.id);
@@ -79,6 +81,25 @@ export const TodoItem = ({
       startWidth.value = endValue;
     })
     .activeOffsetX([-10, 10]);
+
+  // Демо свайпа при первом открытии
+  const demoDuration = 800;
+
+  useEffect(() => {
+    console.log('useEffect');
+    if (doDemoSwipe) {
+      leverWidth.value = withSequence(
+        withTiming(MAX_WIDTH, {
+          duration: demoDuration,
+          easing: Easing.out(Easing.ease),
+        }),
+        withTiming(0, {
+          duration: demoDuration,
+          easing: Easing.in(Easing.ease),
+        }),
+      );
+    }
+  }, [leverWidth, MAX_WIDTH, doDemoSwipe]);
 
   return (
     <Reanimated.View
