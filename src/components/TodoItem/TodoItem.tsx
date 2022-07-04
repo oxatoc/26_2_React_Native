@@ -25,6 +25,7 @@ export const TodoItem = ({
   doDemoSwipe = false,
 }: TodoItemProps) => {
   const handleComplete = useCallback(() => {
+    console.log('handleComplete', todo.id);
     onComplete(todo.id);
   }, [onComplete, todo.id]);
 
