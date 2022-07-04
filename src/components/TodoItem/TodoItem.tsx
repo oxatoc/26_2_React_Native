@@ -86,16 +86,15 @@ export const TodoItem = ({
   const demoDuration = 800;
 
   useEffect(() => {
-    console.log('useEffect');
     if (doDemoSwipe) {
       leverWidth.value = withSequence(
         withTiming(MAX_WIDTH, {
           duration: demoDuration,
-          easing: Easing.out(Easing.ease),
+          easing: Easing.in(Easing.ease),
         }),
         withTiming(0, {
           duration: demoDuration,
-          easing: Easing.in(Easing.ease),
+          easing: Easing.out(Easing.ease),
         }),
       );
     }

@@ -2,8 +2,13 @@ import {BaseTextInput} from '@/components/Base/TextInput/BaseTextInput';
 import {CommonText} from '@/components/Common/CommonText/CommonText';
 import notificationService from '@/services/todoNotificationService';
 import notifee from '@notifee/react-native';
-import React, {useCallback, useEffect} from 'react';
-import {ListRenderItemInfo, SectionList, View} from 'react-native';
+import React, {useCallback, useEffect, useMemo} from 'react';
+import {
+  DefaultSectionT,
+  SectionList,
+  SectionListData,
+  View,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {TodoItem} from '../../components/TodoItem/TodoItem';
 import {TodoListFetch} from '../../components/TodoListFetch/TodoListFetch';
@@ -20,7 +25,7 @@ import {
   selectUncompleted,
 } from '../../store/todos-reducer/selectors';
 import {styles} from './TodoList.styles';
-import {Section, Todo, TodoListProps} from './TodoList.types';
+import {Todo, TodoListProps} from './TodoList.types';
 
 export const TodoList = ({navigation}: TodoListProps) => {
   const completedTodos = useSelector(selectCompleted);
@@ -64,18 +69,35 @@ export const TodoList = ({navigation}: TodoListProps) => {
     [navigation],
   );
 
-  const renderTodo = ({item, index}: ListRenderItemInfo<Todo>) => (
-    <TodoItem
-      key={`${item.id}-${item.title}`}
-      todo={item}
-      onComplete={handleComplete}
-      onDelete={handleDelete}
-      onPress={handlePressThumbnail}
-      doDemoSwipe={index === 0}
-    />
-  );
+  // const renderTodo = ({item, index}: ListRenderItemInfo<Todo>) => (
+  //   <TodoItem
+  //     key={`${item.id}-${item.title}`}
+  //     todo={item}
+  //     onComplete={handleComplete}
+  //     onDelete={handleDelete}
+  //     onPress={handlePressThumbnail}
+  //     doDemoSwipe={index === 0}
+  //   />
+  // );
 
-  const renderSectionHeader = ({section}: Section) => (
+  const renderTodo = (info: {item: Todo; index: any; section: any}) => {
+    const {item, index, section} = info;
+
+    return (
+      <TodoItem
+        key={`${item?.id}-${item?.title}`}
+        todo={item}
+        onComplete={handleComplete}
+        onDelete={handleDelete}
+        onPress={handlePressThumbnail}
+        doDemoSwipe={index === 0 && section.key === '0'}
+      />
+    );
+  };
+
+  const renderSectionHeader = ({
+    section,
+  }: SectionListData<Todo, DefaultSectionT>) => (
     <CommonText style={styles.sectionHeader}>{section.title}</CommonText>
   );
 
@@ -103,6 +125,13 @@ export const TodoList = ({navigation}: TodoListProps) => {
     isAppOpenedByNotif();
   }, [isAppOpenedByNotif]);
 
+  const sections = useMemo<ReadonlyArray<SectionListData<Todo>>>(() => {
+    return [
+      {data: uncompletedTodos, title: 'Незавершенные', key: '0'},
+      {data: completedTodos, title: 'Завершенные', key: '1'},
+    ];
+  }, [completedTodos, uncompletedTodos]);
+
   return (
     <>
       <BaseTextInput
@@ -119,10 +148,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
         />
       )}
       <SectionList
-        sections={[
-          {data: uncompletedTodos, title: 'Незавершенные'},
-          {data: completedTodos, title: 'Завершенные'},
-        ]}
+        sections={sections}
         renderItem={renderTodo}
         renderSectionHeader={renderSectionHeader}
         SectionSeparatorComponent={sectionSeparator}
