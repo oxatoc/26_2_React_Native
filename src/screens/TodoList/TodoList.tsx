@@ -2,7 +2,7 @@ import {BaseTextInput} from '@/components/Base/TextInput/BaseTextInput';
 import {CommonText} from '@/components/Common/CommonText/CommonText';
 import notificationService from '@/services/todoNotificationService';
 import notifee from '@notifee/react-native';
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   SectionList,
   SectionListData,
@@ -33,6 +33,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
   const isFailure = useSelector(selectFailure);
   const isFetching = useSelector(selectFetching);
   const dispatch = useDispatch();
+  const [showDemo, setShowDemo] = useState(true);
 
   useEffect(() => {
     // @ts-ignore
@@ -69,6 +70,10 @@ export const TodoList = ({navigation}: TodoListProps) => {
     [navigation],
   );
 
+  useEffect(() => {
+    setShowDemo(false);
+  }, []);
+
   const renderTodo = (info: SectionListRenderItemInfo<Todo>) => {
     const {item, index, section} = info;
 
@@ -79,7 +84,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
         onComplete={handleComplete}
         onDelete={handleDelete}
         onPress={handlePressThumbnail}
-        doDemoSwipe={index === 0 && section.key === 'first'}
+        doDemoSwipe={index === 0 && section.key === 'first' && showDemo}
       />
     );
   };
