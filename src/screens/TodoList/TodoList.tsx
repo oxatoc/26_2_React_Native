@@ -69,17 +69,6 @@ export const TodoList = ({navigation}: TodoListProps) => {
     [navigation],
   );
 
-  // const renderTodo = ({item, index}: ListRenderItemInfo<Todo>) => (
-  //   <TodoItem
-  //     key={`${item.id}-${item.title}`}
-  //     todo={item}
-  //     onComplete={handleComplete}
-  //     onDelete={handleDelete}
-  //     onPress={handlePressThumbnail}
-  //     doDemoSwipe={index === 0}
-  //   />
-  // );
-
   const renderTodo = (info: SectionListRenderItemInfo<Todo>) => {
     const {item, index, section} = info;
 
