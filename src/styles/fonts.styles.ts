@@ -1,16 +1,13 @@
 import {StyleSheet} from 'react-native';
 
 export const fonts = StyleSheet.create({
-  dMSans400: {
-    fontFamily: 'DmSans-Regular',
-    fontWeight: '400',
+  nunito400: {
+    fontFamily: 'Nunito-Regular',
   },
-  dMSans500: {
-    fontFamily: 'DmSans-Medium',
-    fontWeight: '500',
+  nunito500: {
+    fontFamily: 'Nunito-Medium',
   },
-  dMSans700: {
-    fontFamily: 'DMSans-Bold',
-    fontWeight: '700',
+  nunito700: {
+    fontFamily: 'Nunito-Bold',
   },
 });

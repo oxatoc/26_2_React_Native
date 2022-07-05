@@ -4,7 +4,7 @@ import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   caption: {
-    ...fonts.dMSans500,
+    ...fonts.nunito500,
     fontSize: 14,
     lineHeight: 17,
     paddingHorizontal: 18,

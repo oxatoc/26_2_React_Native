@@ -4,7 +4,7 @@ import {fonts} from './fonts.styles';
 
 export const common = StyleSheet.create({
   screenHeader: {
-    ...fonts.dMSans700,
+    ...fonts.nunito700,
     fontSize: 34,
     lineHeight: 42,
     color: COLORS.rhino,

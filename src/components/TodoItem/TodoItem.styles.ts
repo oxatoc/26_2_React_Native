@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: BORDER.radius,
   },
   todoText: {
-    ...fonts.dMSans700,
+    ...fonts.nunito700,
     fontSize: 14,
     lineHeight: 17,
     color: COLORS.rhino,
