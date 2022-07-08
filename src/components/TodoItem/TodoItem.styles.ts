@@ -10,15 +10,18 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.linkWater,
     borderTopRightRadius: BORDER.radius,
     borderBottomRightRadius: BORDER.radius,
+    // borderWidth: 1,
   },
   deleteButton: {
     width: 38,
     height: 38,
     marginLeft: 'auto',
   },
-  gestureLever: {
-    borderRadius: 10,
-    alignSelf: 'stretch',
+  menuWrapper: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    zIndex: -10,
   },
   movableWrapper: {
     flexDirection: 'row',
@@ -27,6 +30,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderTopRightRadius: BORDER.radius,
     borderBottomRightRadius: BORDER.radius,
+    minHeight: 38,
   },
   todoText: {
     ...fonts.nunito700,

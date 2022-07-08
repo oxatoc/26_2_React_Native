@@ -12,6 +12,7 @@ import Reanimated, {
 import {BaseCheckbox} from '../Base/Checkbox/BaseCheckbox';
 import {BaseThumbnail} from '../Base/Thumbnail/BaseThumbnail';
 import {CommonText} from '../Common/CommonText/CommonText';
+import {CommonDeleteButton} from '../Common/DeleteButton/СommonDeleteButton';
 import {styles} from './TodoItem.styles';
 import {TodoItemProps} from './TodoItem.types';
 
@@ -34,8 +35,12 @@ export const TodoItem = ({
   const offset = useSharedValue(0);
   const start = useSharedValue(0);
 
-  const animatedStyle = useAnimatedStyle(() => ({
+  const movableStyle = useAnimatedStyle(() => ({
     transform: [{translateX: offset.value}],
+  }));
+
+  const menuStyle = useAnimatedStyle(() => ({
+    transform: [{scaleX: offset.value / MAX_WIDTH}],
   }));
 
   const GESTURE_THRESHOLD = 0.5;
@@ -130,7 +135,7 @@ export const TodoItem = ({
       entering={LightSpeedInLeft}
       exiting={LightSpeedOutRight}>
       <GestureDetector gesture={gesture}>
-        <Reanimated.View style={[styles.movableWrapper, animatedStyle]}>
+        <Reanimated.View style={[styles.movableWrapper, movableStyle]}>
           <BaseCheckbox checked={todo.completed} onPress={handleComplete} />
           <TouchableOpacity
             onPress={handlePressImage}
@@ -144,7 +149,14 @@ export const TodoItem = ({
           )}
         </Reanimated.View>
       </GestureDetector>
-      {/* <Reanimated.View style={styles.gestureLever}>
+      <Reanimated.View style={styles.menuWrapper}>
+        <CommonDeleteButton
+          onPress={() => onDelete(todo.id)}
+          style={styles.deleteButton}
+        />
+      </Reanimated.View>
+      {/* <Reanimated.View style={[styles.gestureLever, menuStyle]}>
+        <Text style={styles.testStyle}>aaa</Text>
         <CommonDeleteButton
           onPress={() => onDelete(todo.id)}
           style={styles.deleteButton}
