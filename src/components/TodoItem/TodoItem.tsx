@@ -39,10 +39,6 @@ export const TodoItem = ({
     transform: [{translateX: offset.value}],
   }));
 
-  const menuStyle = useAnimatedStyle(() => ({
-    transform: [{scaleX: offset.value / MAX_WIDTH}],
-  }));
-
   const GESTURE_THRESHOLD = 0.5;
   const gesture = Gesture.Pan()
     .onUpdate(({translationX}) => {
