@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Reanimated, {
@@ -7,6 +7,7 @@ import Reanimated, {
   LightSpeedOutRight,
   useAnimatedStyle,
   useSharedValue,
+  withSequence,
   withTiming,
 } from 'react-native-reanimated';
 import {BaseCheckbox} from '../Base/Checkbox/BaseCheckbox';
@@ -60,70 +61,23 @@ export const TodoItem = ({
     })
     .activeOffsetX([-10, 10]);
 
-  // const leverWidth = useSharedValue(0);
-  // const animatedStyle = useAnimatedStyle(() => {
-  //   return {
-  //     width: leverWidth.value,
-  //   };
-  // });
-
-  // const startWidth = useSharedValue(0);
-
-  // const gesture = Gesture.Pan()
-  //   .onUpdate(({translationX}) => {
-  //     if (translationX === 0) {
-  //       return;
-  //     }
-
-  //     if (translationX > 0) {
-  //       leverWidth.value = Math.max(startWidth.value - translationX, 0);
-  //       return;
-  //     }
-
-  //     if (leverWidth.value === MAX_WIDTH) {
-  //       return;
-  //     }
-  //     if (translationX > -MAX_WIDTH) {
-  //       leverWidth.value = -translationX;
-  //     }
-  //   })
-  //   .onEnd(({translationX}) => {
-  //     let length = Math.abs(translationX) / MAX_WIDTH;
-
-  //     let endValue;
-
-  //     if (translationX > 0) {
-  //       endValue = length > GESTURE_THRESHOLD ? 0 : MAX_WIDTH;
-  //     } else {
-  //       endValue = length < GESTURE_THRESHOLD ? 0 : MAX_WIDTH;
-  //     }
-
-  //     leverWidth.value = withTiming(endValue, {
-  //       duration: 300,
-  //       easing:
-  //         endValue === 0 ? Easing.in(Easing.ease) : Easing.out(Easing.ease),
-  //     });
-  //     startWidth.value = endValue;
-  //   })
-  //   .activeOffsetX([-10, 10]);
-
   // Демо свайпа при первом открытии
-  // const demoDuration = 800;
+  const demoDuration = 800;
 
-  // useEffect(() => {
-  //   if (doDemoSwipe) {
-  //     leverWidth.value = withSequence(
-  //       withTiming(MAX_WIDTH, {
-  //         duration: demoDuration,
-  //         easing: Easing.in(Easing.ease),
-  //       }),
-  //       withTiming(0, {
-  //         duration: demoDuration,
-  //         easing: Easing.out(Easing.ease),
-  //       }),
-  //     );
-  //   }
-  // }, [leverWidth, MAX_WIDTH, doDemoSwipe]);
+  useEffect(() => {
+    if (doDemoSwipe) {
+      offset.value = withSequence(
+        withTiming(MAX_WIDTH, {
+          duration: demoDuration,
+          easing: Easing.in(Easing.ease),
+        }),
+        withTiming(0, {
+          duration: demoDuration,
+          easing: Easing.out(Easing.ease),
+        }),
+      );
+    }
+  }, [MAX_WIDTH, doDemoSwipe, offset]);
 
   return (
     <Reanimated.View
