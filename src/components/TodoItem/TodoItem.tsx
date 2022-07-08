@@ -1,19 +1,15 @@
-import React, {useCallback, useEffect} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import React, {useCallback} from 'react';
+import {TouchableOpacity} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Reanimated, {
-  Easing,
   LightSpeedInLeft,
   LightSpeedOutRight,
   useAnimatedStyle,
   useSharedValue,
-  withSequence,
-  withTiming,
 } from 'react-native-reanimated';
 import {BaseCheckbox} from '../Base/Checkbox/BaseCheckbox';
 import {BaseThumbnail} from '../Base/Thumbnail/BaseThumbnail';
 import {CommonText} from '../Common/CommonText/CommonText';
-import {CommonDeleteButton} from '../Common/DeleteButton/СommonDeleteButton';
 import {styles} from './TodoItem.styles';
 import {TodoItemProps} from './TodoItem.types';
 
@@ -32,73 +28,93 @@ export const TodoItem = ({
     onPress(todo.id);
   }, [onPress, todo.id]);
 
-  const MAX_WIDTH = 38 + 38;
-  const leverWidth = useSharedValue(0);
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      width: leverWidth.value,
-    };
-  });
+  const MAX_WIDTH = -(38 + 38);
+  const offset = useSharedValue(0);
+  const start = useSharedValue(0);
 
-  const startWidth = useSharedValue(0);
-
-  const GESTURE_THRESHOLD = 0.5;
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{translateX: offset.value}],
+  }));
 
   const gesture = Gesture.Pan()
     .onUpdate(({translationX}) => {
-      if (translationX === 0) {
+      if (translationX > 0 && start.value === 0) {
         return;
       }
-
-      if (translationX > 0) {
-        leverWidth.value = Math.max(startWidth.value - translationX, 0);
-        return;
-      }
-
-      if (leverWidth.value === MAX_WIDTH) {
-        return;
-      }
-      if (translationX > -MAX_WIDTH) {
-        leverWidth.value = -translationX;
-      }
+      offset.value = translationX + start.value;
+      offset.value = Math.min(offset.value, 0);
+      offset.value = Math.max(offset.value, MAX_WIDTH);
     })
-    .onEnd(({translationX}) => {
-      let length = Math.abs(translationX) / MAX_WIDTH;
+    .onEnd(() => {
+      start.value = offset.value;
+    });
 
-      let endValue;
+  // const leverWidth = useSharedValue(0);
+  // const animatedStyle = useAnimatedStyle(() => {
+  //   return {
+  //     width: leverWidth.value,
+  //   };
+  // });
 
-      if (translationX > 0) {
-        endValue = length > GESTURE_THRESHOLD ? 0 : MAX_WIDTH;
-      } else {
-        endValue = length < GESTURE_THRESHOLD ? 0 : MAX_WIDTH;
-      }
+  // const startWidth = useSharedValue(0);
 
-      leverWidth.value = withTiming(endValue, {
-        duration: 300,
-        easing:
-          endValue === 0 ? Easing.in(Easing.ease) : Easing.out(Easing.ease),
-      });
-      startWidth.value = endValue;
-    })
-    .activeOffsetX([-10, 10]);
+  // const GESTURE_THRESHOLD = 0.5;
+
+  // const gesture = Gesture.Pan()
+  //   .onUpdate(({translationX}) => {
+  //     if (translationX === 0) {
+  //       return;
+  //     }
+
+  //     if (translationX > 0) {
+  //       leverWidth.value = Math.max(startWidth.value - translationX, 0);
+  //       return;
+  //     }
+
+  //     if (leverWidth.value === MAX_WIDTH) {
+  //       return;
+  //     }
+  //     if (translationX > -MAX_WIDTH) {
+  //       leverWidth.value = -translationX;
+  //     }
+  //   })
+  //   .onEnd(({translationX}) => {
+  //     let length = Math.abs(translationX) / MAX_WIDTH;
+
+  //     let endValue;
+
+  //     if (translationX > 0) {
+  //       endValue = length > GESTURE_THRESHOLD ? 0 : MAX_WIDTH;
+  //     } else {
+  //       endValue = length < GESTURE_THRESHOLD ? 0 : MAX_WIDTH;
+  //     }
+
+  //     leverWidth.value = withTiming(endValue, {
+  //       duration: 300,
+  //       easing:
+  //         endValue === 0 ? Easing.in(Easing.ease) : Easing.out(Easing.ease),
+  //     });
+  //     startWidth.value = endValue;
+  //   })
+  //   .activeOffsetX([-10, 10]);
 
   // Демо свайпа при первом открытии
-  const demoDuration = 800;
+  // const demoDuration = 800;
 
-  useEffect(() => {
-    if (doDemoSwipe) {
-      leverWidth.value = withSequence(
-        withTiming(MAX_WIDTH, {
-          duration: demoDuration,
-          easing: Easing.in(Easing.ease),
-        }),
-        withTiming(0, {
-          duration: demoDuration,
-          easing: Easing.out(Easing.ease),
-        }),
-      );
-    }
-  }, [leverWidth, MAX_WIDTH, doDemoSwipe]);
+  // useEffect(() => {
+  //   if (doDemoSwipe) {
+  //     leverWidth.value = withSequence(
+  //       withTiming(MAX_WIDTH, {
+  //         duration: demoDuration,
+  //         easing: Easing.in(Easing.ease),
+  //       }),
+  //       withTiming(0, {
+  //         duration: demoDuration,
+  //         easing: Easing.out(Easing.ease),
+  //       }),
+  //     );
+  //   }
+  // }, [leverWidth, MAX_WIDTH, doDemoSwipe]);
 
   return (
     <Reanimated.View
@@ -106,7 +122,7 @@ export const TodoItem = ({
       entering={LightSpeedInLeft}
       exiting={LightSpeedOutRight}>
       <GestureDetector gesture={gesture}>
-        <View style={styles.shrinkableWrapper}>
+        <Reanimated.View style={[styles.shrinkableWrapper, animatedStyle]}>
           <BaseCheckbox checked={todo.completed} onPress={handleComplete} />
           <TouchableOpacity
             onPress={handlePressImage}
@@ -118,14 +134,14 @@ export const TodoItem = ({
           {todo.assets.length > 0 && (
             <BaseThumbnail style={styles.thumbnail} uri={todo.assets[0].uri} />
           )}
-        </View>
+        </Reanimated.View>
       </GestureDetector>
-      <Reanimated.View style={[styles.gestureLever, animatedStyle]}>
+      {/* <Reanimated.View style={styles.gestureLever}>
         <CommonDeleteButton
           onPress={() => onDelete(todo.id)}
           style={styles.deleteButton}
         />
-      </Reanimated.View>
+      </Reanimated.View> */}
     </Reanimated.View>
   );
 };
