@@ -47,7 +47,7 @@ class TodoNotificationService {
     const notifList = await notifee.getTriggerNotifications();
     return notifList.map<notifItem>(item => ({
       notifId: item.notification.id ?? '',
-      todoId: parseInt(item.notification.data?.id ?? '-1'),
+      todoId: parseInt(item.notification.data?.id ?? '-1', 10),
       triggerDate: new Date((item.trigger as TimestampTrigger).timestamp),
     }));
   }
@@ -70,7 +70,7 @@ class TodoNotificationService {
     if (todoId) {
       navRef.navigate('StackNavigation', {
         screen: 'TodoDetails',
-        params: {todoId: parseInt(todoId)},
+        params: {todoId: parseInt(todoId, 10)},
       });
     }
   }
@@ -101,8 +101,6 @@ class TodoNotificationService {
               delete notif.id;
 
               await notifee.createTriggerNotification(notif, trigger);
-
-              // console.log('уведомление через 5 минут id = ', notifId);
             }
 
             break;
@@ -130,9 +128,7 @@ class TodoNotificationService {
     });
   }
 
-  // Private methods
-
-  async createNotification(
+  private async createNotification(
     todo: Todo,
     notifId: string = '',
   ): Promise<Notification> {

@@ -4,7 +4,7 @@ import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   input: {
-    ...fonts.dMSans500,
+    ...fonts.nunito500,
     fontSize: 14,
     lineHeight: 20,
     paddingHorizontal: 20,

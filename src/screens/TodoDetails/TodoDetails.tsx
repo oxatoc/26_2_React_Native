@@ -40,18 +40,17 @@ export const TodoDetails = ({navigation, route}: TodoDetailsProps) => {
         <SaveButton onPress={handleSave} isDisabled={!isDirty} />
       ),
     });
-  }, [navigation, handleSave]);
-
-  const getNotifByTodo = async () => {
-    const notifItem = await todoNotificationService.getByTodoId(todo.id);
-    setDateInput(notifItem?.triggerDate);
-    setTimeInput(notifItem?.triggerDate);
-    setNotifState(!!notifItem);
-  };
+  }, [navigation, handleSave, isDirty]);
 
   useEffect(() => {
+    const getNotifByTodo = async () => {
+      const notifItem = await todoNotificationService.getByTodoId(todo.id);
+      setDateInput(notifItem?.triggerDate);
+      setTimeInput(notifItem?.triggerDate);
+      setNotifState(!!notifItem);
+    };
     getNotifByTodo();
-  }, []);
+  }, [todo.id]);
 
   const handlePressThumbnail = (uri: string | undefined) => {
     if (uri) {
@@ -59,10 +58,10 @@ export const TodoDetails = ({navigation, route}: TodoDetailsProps) => {
     }
   };
 
-  const handleSubmitName = (newName: string) => {
-    if (newName.length > 0) {
-      setNewName(newName);
-      setIsDirty(newName !== todo.title);
+  const handleSubmitName = (name: string) => {
+    if (name.length > 0) {
+      setNewName(name);
+      setIsDirty(name !== todo.title);
     }
   };
 
@@ -166,23 +165,21 @@ export const TodoDetails = ({navigation, route}: TodoDetailsProps) => {
         </View>
         <BaseSwitch value={notifState} onToggle={handleChangeNotif} />
       </View>
-      <View style={styles.section}>
-        {todo.assets.length > 0 && (
-          <>
-            <CommonLabel style={styles.todoLabel}>Вложения</CommonLabel>
-            <View style={styles.assetsList}>
-              {todo.assets.map((asset, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => handlePressThumbnail(asset.uri)}
-                  style={styles.assetsItem}>
-                  <BaseThumbnail uri={asset.uri} kind="kind_todo_details" />
-                </TouchableOpacity>
-              ))}
-            </View>
-          </>
-        )}
-      </View>
+      {todo.assets.length > 0 && (
+        <View style={styles.section}>
+          <CommonLabel style={styles.todoLabel}>Вложения</CommonLabel>
+          <View style={styles.assetsList}>
+            {todo.assets.map((asset, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handlePressThumbnail(asset.uri)}
+                style={styles.assetsItem}>
+                <BaseThumbnail uri={asset.uri} kind="kind_todo_details" />
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      )}
       <View style={styles.addButtonWrapper}>
         <BaseButton style={styles.addButton} onPress={handlePressAdd}>
           Добавить вложение
