@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: 'stretch',
   },
-  shrinkableWrapper: {
+  movableWrapper: {
     flexDirection: 'row',
     flexGrow: 1,
     alignItems: 'flex-start',

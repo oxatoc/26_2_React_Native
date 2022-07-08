@@ -2,10 +2,12 @@ import React, {useCallback} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Reanimated, {
+  Easing,
   LightSpeedInLeft,
   LightSpeedOutRight,
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
 import {BaseCheckbox} from '../Base/Checkbox/BaseCheckbox';
 import {BaseThumbnail} from '../Base/Thumbnail/BaseThumbnail';
@@ -36,18 +38,26 @@ export const TodoItem = ({
     transform: [{translateX: offset.value}],
   }));
 
+  const GESTURE_THRESHOLD = 0.5;
   const gesture = Gesture.Pan()
     .onUpdate(({translationX}) => {
-      if (translationX > 0 && start.value === 0) {
-        return;
-      }
       offset.value = translationX + start.value;
       offset.value = Math.min(offset.value, 0);
       offset.value = Math.max(offset.value, MAX_WIDTH);
     })
     .onEnd(() => {
-      start.value = offset.value;
-    });
+      let position = offset.value / MAX_WIDTH;
+
+      let endPosition = position > GESTURE_THRESHOLD ? MAX_WIDTH : 0;
+      offset.value = withTiming(endPosition, {
+        duration: 300,
+        easing:
+          endPosition === 0 ? Easing.in(Easing.ease) : Easing.out(Easing.ease),
+      });
+
+      start.value = endPosition;
+    })
+    .activeOffsetX([-10, 10]);
 
   // const leverWidth = useSharedValue(0);
   // const animatedStyle = useAnimatedStyle(() => {
@@ -57,8 +67,6 @@ export const TodoItem = ({
   // });
 
   // const startWidth = useSharedValue(0);
-
-  // const GESTURE_THRESHOLD = 0.5;
 
   // const gesture = Gesture.Pan()
   //   .onUpdate(({translationX}) => {
@@ -122,7 +130,7 @@ export const TodoItem = ({
       entering={LightSpeedInLeft}
       exiting={LightSpeedOutRight}>
       <GestureDetector gesture={gesture}>
-        <Reanimated.View style={[styles.shrinkableWrapper, animatedStyle]}>
+        <Reanimated.View style={[styles.movableWrapper, animatedStyle]}>
           <BaseCheckbox checked={todo.completed} onPress={handleComplete} />
           <TouchableOpacity
             onPress={handlePressImage}
