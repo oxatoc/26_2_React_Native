@@ -7,7 +7,7 @@
 // @ts-ignore
 import 'react-native-gesture-handler';
 
-import {BottomTabParams} from '@/navigation/BottomNavigator/BottomTabNavigator.types';
+import {BottomTabParams} from '@/navigation/BottomTabNavigator/BottomTabNavigator.types';
 import {
   createNavigationContainerRef,
   NavigationContainer,
@@ -17,7 +17,7 @@ import {StatusBar, useColorScheme} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/es/integration/react';
-import {BottomTabNavigation} from './src/navigation/BottomNavigator/BottomTabNavigation';
+import {BottomTabNavigation} from './src/navigation/BottomTabNavigator/BottomTabNavigation';
 import {persistor, store} from './src/store';
 
 export const navRef = createNavigationContainerRef<BottomTabParams>();

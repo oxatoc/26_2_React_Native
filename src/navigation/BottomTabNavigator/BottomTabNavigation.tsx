@@ -1,5 +1,6 @@
-import {QuestionIcon} from '@/components/BottomTabNavigator/QuestionIcon/QuestionIcon';
+import {SettingsIcon} from '@/components/BottomTabNavigator/SettingsIcon/SettingsIcon';
 import {TasksIcon} from '@/components/BottomTabNavigator/TasksIcon/TasksIcon';
+import {COLORS} from '@/constants/colors';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import {BottomTabScreen} from '../../screens/BottomTabScreen/BottomTabScreen';
@@ -9,15 +10,19 @@ import {BottomTabParams} from './BottomTabNavigator.types';
 const BottomTab = createBottomTabNavigator<BottomTabParams>();
 
 export const BottomTabNavigation = () => (
-  <BottomTab.Navigator screenOptions={{headerShown: false}}>
+  <BottomTab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarShowLabel: false,
+      tabBarActiveTintColor: COLORS.rhino,
+      tabBarInactiveTintColor: COLORS.cadetGrey,
+    }}>
     <BottomTab.Screen
       name="StackNavigation"
       component={StackNavigation}
       options={{
         title: 'Задачи',
-        tabBarIcon: ({focused, color, size}) => (
-          <TasksIcon focused={focused} color={color} size={size} />
-        ),
+        tabBarIcon: props => <TasksIcon {...props} />,
       }}
     />
     <BottomTab.Screen
@@ -25,9 +30,7 @@ export const BottomTabNavigation = () => (
       component={BottomTabScreen}
       options={{
         title: 'Второй экран',
-        tabBarIcon: ({focused, color, size}) => (
-          <QuestionIcon focused={focused} color={color} size={size} />
-        ),
+        tabBarIcon: props => <SettingsIcon {...props} />,
       }}
     />
   </BottomTab.Navigator>
