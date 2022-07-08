@@ -1,11 +1,14 @@
 import {BaseTextInput} from '@/components/Base/TextInput/BaseTextInput';
 import {CommonText} from '@/components/Common/CommonText/CommonText';
-import Example from '@/components/Example';
 import notificationService from '@/services/todoNotificationService';
 import notifee from '@notifee/react-native';
-import React, {useCallback, useEffect} from 'react';
-import {ListRenderItemInfo, View} from 'react-native';
-import Animated from 'react-native-reanimated';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItemInfo,
+  View,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {TodoItem} from '../../components/TodoItem/TodoItem';
 import {TodoListFetch} from '../../components/TodoListFetch/TodoListFetch';
@@ -30,6 +33,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
   const isFailure = useSelector(selectFailure);
   const isFetching = useSelector(selectFetching);
   const dispatch = useDispatch();
+  const [showDemo, setShowDemo] = useState(true);
 
   useEffect(() => {
     // @ts-ignore
@@ -37,7 +41,7 @@ export const TodoList = ({navigation}: TodoListProps) => {
   }, [dispatch]);
 
   const handleComplete = useCallback(
-    id => {
+    (id: number) => {
       dispatch(completeTodo(id));
     },
     [dispatch],
@@ -66,41 +70,59 @@ export const TodoList = ({navigation}: TodoListProps) => {
     [navigation],
   );
 
-  const renderTodo = ({item}: ListRenderItemInfo<Todo>) => (
-    <TodoItem
-      key={`${item.id}-${item.title}`}
-      todo={item}
-      onComplete={handleComplete}
-      onDelete={handleDelete}
-      onPress={handlePressThumbnail}
-    />
-  );
+  useEffect(() => {
+    setShowDemo(false);
+  }, []);
+
+  const renderTodo = (info: SectionListRenderItemInfo<Todo>) => {
+    const {item, index, section} = info;
+
+    return (
+      <TodoItem
+        key={`${item?.id}-${item?.title}`}
+        todo={item}
+        onComplete={handleComplete}
+        onDelete={handleDelete}
+        onPress={handlePressThumbnail}
+        doDemoSwipe={index === 0 && section.key === 'first' && showDemo}
+      />
+    );
+  };
 
   const renderSectionHeader = ({section}: Section) => (
     <CommonText style={styles.sectionHeader}>{section.title}</CommonText>
   );
 
-  const sectionSeparator = () => <View style={styles.separator} />;
+  const sectionSeparator = () => <View style={styles.sectionSeparator} />;
+
+  const itemSeparator = () => <View style={styles.itemSeparator} />;
 
   useEffect(() => {
-    return notifee.onForegroundEvent(({type, detail}) => {
+    notifee.onForegroundEvent(({type, detail}) => {
       notificationService.handleEvent(type, detail);
     });
   }, []);
 
-  const isAppOpenedByNotif = async () => {
+  const isAppOpenedByNotif = useCallback(async () => {
     const initialNotification = await notifee.getInitialNotification();
     if (initialNotification) {
       const todoId = initialNotification.notification?.data?.id;
       if (todoId) {
-        navigation.navigate('TodoDetails', {todoId: parseInt(todoId)});
+        navigation.navigate('TodoDetails', {todoId: parseInt(todoId, 10)});
       }
     }
-  };
+  }, [navigation]);
 
   useEffect(() => {
     isAppOpenedByNotif();
-  }, []);
+  }, [isAppOpenedByNotif]);
+
+  const sections = useMemo<ReadonlyArray<SectionListData<Todo>>>(() => {
+    return [
+      {data: uncompletedTodos, title: 'Незавершенные', key: 'first'},
+      {data: completedTodos, title: 'Завершенные', key: 'second'},
+    ];
+  }, [completedTodos, uncompletedTodos]);
 
   return (
     <>
@@ -117,27 +139,13 @@ export const TodoList = ({navigation}: TodoListProps) => {
           onRetry={handleLoad}
         />
       )}
-      {/* <SectionList
-        sections={[
-          {data: uncompletedTodos, title: 'Незавершенные'},
-          {data: completedTodos, title: 'Завершенные'},
-        ]}
+      <SectionList
+        sections={sections}
         renderItem={renderTodo}
         renderSectionHeader={renderSectionHeader}
         SectionSeparatorComponent={sectionSeparator}
-      /> */}
-      <Animated.ScrollView>
-        {uncompletedTodos.map(item => (
-          <TodoItem
-            key={`${item.id}-${item.title}`}
-            todo={item}
-            onComplete={handleComplete}
-            onDelete={handleDelete}
-            onPress={handlePressThumbnail}
-          />
-        ))}
-      </Animated.ScrollView>
-      <Example />
+        ItemSeparatorComponent={itemSeparator}
+      />
     </>
   );
 };

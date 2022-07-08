@@ -1,20 +1,39 @@
+import {BORDER} from '@/constants/border';
 import {COLORS} from '@/constants/colors';
 import {fonts} from '@/styles/fonts.styles';
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   root: {
-    flexDirection: 'row',
     marginVertical: 10,
-    alignItems: 'flex-start',
+    flexDirection: 'row',
+    backgroundColor: COLORS.linkWater,
+    borderTopRightRadius: BORDER.radius,
+    borderBottomRightRadius: BORDER.radius,
+    // borderWidth: 1,
   },
-  gestureLever: {
-    width: 25,
-    height: 25,
-    backgroundColor: '#CCCCCC',
+  deleteButton: {
+    width: 38,
+    height: 38,
+    marginLeft: 'auto',
+  },
+  menuWrapper: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    zIndex: -10,
+  },
+  movableWrapper: {
+    flexDirection: 'row',
+    flexGrow: 1,
+    alignItems: 'flex-start',
+    backgroundColor: COLORS.white,
+    borderTopRightRadius: BORDER.radius,
+    borderBottomRightRadius: BORDER.radius,
+    minHeight: 38,
   },
   todoText: {
-    ...fonts.dMSans700,
+    ...fonts.nunito700,
     fontSize: 14,
     lineHeight: 17,
     color: COLORS.rhino,
@@ -25,10 +44,9 @@ export const styles = StyleSheet.create({
     flexBasis: 0,
     marginLeft: 16,
     marginRight: 8,
-    alignSelf: 'stretch',
   },
   thumbnail: {
-    marginRight: 16,
+    marginRight: 8,
   },
   thumbnailsWrapper: {
     flexDirection: 'row',
